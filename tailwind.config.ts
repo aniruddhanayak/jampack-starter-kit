@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +60,18 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        teal: {
+          50: "hsl(173, 80%, 95%)",
+          100: "hsl(173, 80%, 85%)",
+          200: "hsl(173, 80%, 75%)",
+          300: "hsl(173, 80%, 65%)",
+          400: "hsl(173, 80%, 55%)",
+          500: "hsl(173, 80%, 50%)",
+          600: "hsl(173, 80%, 40%)",
+          700: "hsl(173, 80%, 30%)",
+          800: "hsl(173, 80%, 20%)",
+          900: "hsl(173, 80%, 10%)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +80,32 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px -5px hsl(173 80% 50% / 0.3)" },
+          "50%": { boxShadow: "0 0 40px -5px hsl(173 80% 50% / 0.5)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 6s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 3s ease-in-out infinite",
+        "shimmer": "shimmer 3s linear infinite",
       },
     },
   },
