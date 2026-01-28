@@ -4,6 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
+import { ReadingProgress } from "@/components/blog/ReadingProgress";
+import { TableOfContents } from "@/components/blog/TableOfContents";
+import { NewsletterSignup } from "@/components/blog/NewsletterSignup";
+import { useEffect } from "react";
 
 const blogPosts = [
   {
@@ -242,6 +246,19 @@ const BlogPost = () => {
   const { id } = useParams();
   const post = blogPosts.find((p) => p.id === Number(id));
 
+  // Add IDs to headings for TOC navigation
+  useEffect(() => {
+    if (post) {
+      const articleContent = document.querySelector(".prose");
+      if (articleContent) {
+        const h2s = articleContent.querySelectorAll("h2");
+        h2s.forEach((h2, index) => {
+          h2.id = `heading-${index}`;
+        });
+      }
+    }
+  }, [post]);
+
   if (!post) {
     return (
       <div className="min-h-screen bg-background">
@@ -262,6 +279,7 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ReadingProgress />
       <Navbar />
 
       {/* Hero */}
@@ -333,65 +351,73 @@ const BlogPost = () => {
 
       {/* Content */}
       <article className="container mx-auto px-6 pb-16">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="prose prose-invert prose-lg max-w-none
-              prose-headings:text-foreground prose-headings:font-bold
-              prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-              prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-primary
-              prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
-              prose-ul:text-muted-foreground prose-ul:my-4
-              prose-li:my-2
-              prose-strong:text-foreground prose-strong:font-semibold
-              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5
-              prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:my-8
-              prose-blockquote:italic prose-blockquote:text-foreground/90
-              [&_blockquote_p]:text-lg [&_blockquote_p]:font-medium [&_blockquote_p]:mb-0"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+        <div className="flex gap-8 justify-center">
+          <div className="max-w-3xl flex-grow">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="prose prose-invert prose-lg max-w-none
+                prose-headings:text-foreground prose-headings:font-bold
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-primary
+                prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
+                prose-ul:text-muted-foreground prose-ul:my-4
+                prose-li:my-2
+                prose-strong:text-foreground prose-strong:font-semibold
+                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5
+                prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:my-8
+                prose-blockquote:italic prose-blockquote:text-foreground/90
+                [&_blockquote_p]:text-lg [&_blockquote_p]:font-medium [&_blockquote_p]:mb-0"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
 
-          {/* Share */}
-          <div className="mt-12 pt-8 border-t border-border">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-muted-foreground" />
-                <span className="text-muted-foreground">Share this article</span>
+            {/* Newsletter Signup */}
+            <NewsletterSignup />
+
+            {/* Share */}
+            <div className="mt-12 pt-8 border-t border-border">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <Share2 className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-muted-foreground">Share this article</span>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Twitter className="w-4 h-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Linkedin className="w-4 h-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Facebook className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Twitter className="w-4 h-4" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Linkedin className="w-4 h-4" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Facebook className="w-4 h-4" />
-                </Button>
+            </div>
+
+            {/* Author Box */}
+            <div className="mt-8 p-6 rounded-2xl bg-gradient-card border border-border">
+              <div className="flex items-start gap-4">
+                <img
+                  src={post.author.avatar}
+                  alt={post.author.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
+                />
+                <div>
+                  <p className="font-semibold text-lg">{post.author.name}</p>
+                  <p className="text-sm text-primary mb-2">{post.author.role}</p>
+                  <p className="text-muted-foreground text-sm">
+                    Passionate about building great products and sharing knowledge with the developer community.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Author Box */}
-          <div className="mt-8 p-6 rounded-2xl bg-gradient-card border border-border">
-            <div className="flex items-start gap-4">
-              <img
-                src={post.author.avatar}
-                alt={post.author.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
-              />
-              <div>
-                <p className="font-semibold text-lg">{post.author.name}</p>
-                <p className="text-sm text-primary mb-2">{post.author.role}</p>
-                <p className="text-muted-foreground text-sm">
-                  Passionate about building great products and sharing knowledge with the developer community.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Table of Contents Sidebar */}
+          <TableOfContents content={post.content} />
         </div>
       </article>
 
