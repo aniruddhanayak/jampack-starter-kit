@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const plans = [
@@ -53,6 +54,12 @@ const plans = [
 ];
 
 export const Pricing = () => {
+  const navigate = useNavigate();
+
+  const handlePlanSelect = (planName: string) => {
+    navigate(`/checkout?plan=${planName.toLowerCase()}`);
+  };
+
   return (
     <section id="pricing" className="py-24 bg-card relative overflow-hidden">
       {/* Background */}
@@ -129,6 +136,7 @@ export const Pricing = () => {
                 variant={plan.popular ? "hero" : "outline"}
                 className="w-full"
                 size="lg"
+                onClick={() => handlePlanSelect(plan.name)}
               >
                 {plan.cta}
               </Button>
